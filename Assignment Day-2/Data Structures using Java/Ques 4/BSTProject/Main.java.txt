@@ -1,0 +1,50 @@
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        BST bst = new BST();
+        Scanner sc = new Scanner(System.in);
+        int choice;
+
+        do {
+            System.out.println("\n=== BINARY SEARCH TREE MENU ===");
+            System.out.println("1. Add Node");
+            System.out.println("2. Remove Node");
+            System.out.println("3. In-order Traversal");
+            System.out.println("4. Pre-order Traversal");
+            System.out.println("5. Post-order Traversal");
+            System.out.println("6. Exit");
+            System.out.print("Enter your choice: ");
+            choice = sc.nextInt();
+
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter value to add: ");
+                    int add = sc.nextInt();
+                    bst.addNode(add);
+                    break;
+                case 2:
+                    System.out.print("Enter value to remove: ");
+                    int remove = sc.nextInt();
+                    bst.removeNode(remove);
+                    break;
+                case 3:
+                    bst.inorder();
+                    break;
+                case 4:
+                    bst.preorder();
+                    break;
+                case 5:
+                    bst.postorder();
+                    break;
+                case 6:
+                    System.out.println(" Exiting...");
+                    break;
+                default:
+                    System.out.println(" Invalid choice");
+            }
+        } while (choice != 6);
+
+        sc.close();
+    }
+}
