@@ -1,0 +1,118 @@
+public class CircularLinkedList {
+    private Node head = null;
+    private Node tail = null;
+    private int size = 0;
+
+    //  Insert new node at 'n' th position
+    public void insertAt(int data, int position) {
+        Node newNode = new Node(data);
+        if (position < 1 || position > size + 1) {
+            System.out.println(" Invalid position");
+            return;
+        }
+
+        if (head == null) {  // list empty
+            head = newNode;
+            tail = newNode;
+            tail.next = head;
+        } 
+        else if (position == 1) { // insert at beginning
+            newNode.next = head;
+            head = newNode;
+            tail.next = head;
+        } 
+        else if (position == size + 1) { // insert at end
+            tail.next = newNode;
+            tail = newNode;
+            tail.next = head;
+        } 
+        else { // insert in middle
+            Node temp = head;
+            for (int i = 1; i < position - 1; i++) {
+                temp = temp.next;
+            }
+            newNode.next = temp.next;
+            temp.next = newNode;
+        }
+        size++;
+        System.out.println(" Node inserted at position " + position);
+    }
+
+    //  Delete node by data
+    public void deleteByData(int data) {
+        if (head == null) {
+            System.out.println(" List is empty");
+            return;
+        }
+
+        Node current = head;
+        Node prev = tail;
+
+        // delete head
+        if (head.data == data) {
+            if (head == tail) { // single node
+                head = null;
+                tail = null;
+            } else {
+                head = head.next;
+                tail.next = head;
+            }
+            size--;
+            System.out.println(" Node with data " + data + " deleted");
+            return;
+        }
+
+        // traverse to find
+        do {
+            if (current.data == data) {
+                prev.next = current.next;
+                if (current == tail) {
+                    tail = prev;
+                }
+                size--;
+                System.out.println(" Node with data " + data + " deleted");
+                return;
+            }
+            prev = current;
+            current = current.next;
+        } while (current != head);
+
+        System.out.println(" Node with data " + data + " not found");
+    }
+
+    //  Modify node
+    public void modifyNode(int oldData, int newData) {
+        if (head == null) {
+            System.out.println(" List is empty");
+            return;
+        }
+
+        Node current = head;
+        do {
+            if (current.data == oldData) {
+                current.data = newData;
+                System.out.println(" Node data " + oldData + " modified to " + newData);
+                return;
+            }
+            current = current.next;
+        } while (current != head);
+
+        System.out.println(" Node with data " + oldData + " not found");
+    }
+
+    //  Display list
+    public void display() {
+        if (head == null) {
+            System.out.println(" List is empty");
+            return;
+        }
+
+        Node temp = head;
+        System.out.print(" Circular Linked List: ");
+        do {
+            System.out.print(temp.data + " ");
+            temp = temp.next;
+        } while (temp != head);
+        System.out.println();
+    }
+}

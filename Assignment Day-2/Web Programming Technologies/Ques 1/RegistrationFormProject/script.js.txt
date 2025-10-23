@@ -1,0 +1,70 @@
+function validateForm() {
+    // Clear previous errors
+    document.getElementById("firstNameError").innerText = "";
+    document.getElementById("lastNameError").innerText = "";
+    document.getElementById("emailError").innerText = "";
+    document.getElementById("userIdError").innerText = "";
+    document.getElementById("passwordError").innerText = "";
+    document.getElementById("confirmPasswordError").innerText = "";
+    document.getElementById("successMessage").innerText = "";
+
+    let isValid = true;
+
+    let firstName = document.getElementById("firstName").value.trim();
+    let lastName = document.getElementById("lastName").value.trim();
+    let email = document.getElementById("email").value.trim();
+    let userId = document.getElementById("userId").value.trim();
+    let password = document.getElementById("password").value;
+    let confirmPassword = document.getElementById("confirmPassword").value;
+
+    // Validate first name
+    if (firstName === "") {
+        document.getElementById("firstNameError").innerText = "First Name is required";
+        isValid = false;
+    }
+
+    // Validate last name
+    if (lastName === "") {
+        document.getElementById("lastNameError").innerText = "Last Name is required";
+        isValid = false;
+    }
+
+    // Validate email
+    if (email === "") {
+        document.getElementById("emailError").innerText = "Email is required";
+        isValid = false;
+    } else {
+        let emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+        if (!emailPattern.test(email)) {
+            document.getElementById("emailError").innerText = "Invalid email format";
+            isValid = false;
+        }
+    }
+
+    // Validate user ID
+    if (userId === "") {
+        document.getElementById("userIdError").innerText = "User ID is required";
+        isValid = false;
+    }
+
+    // Validate password
+    if (password === "") {
+        document.getElementById("passwordError").innerText = "Password is required";
+        isValid = false;
+    }
+
+    // Validate confirm password
+    if (confirmPassword === "") {
+        document.getElementById("confirmPasswordError").innerText = "Confirm Password is required";
+        isValid = false;
+    } else if (password !== confirmPassword) {
+        document.getElementById("confirmPasswordError").innerText = "Passwords do not match";
+        isValid = false;
+    }
+
+    if (isValid) {
+        document.getElementById("successMessage").innerText = "Form submitted successfully!";
+    }
+
+    return false; // prevent actual form submission for demo
+}

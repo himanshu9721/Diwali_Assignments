@@ -1,0 +1,52 @@
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        CircularLinkedList cll = new CircularLinkedList();
+        Scanner sc = new Scanner(System.in);
+        int choice;
+
+        do {
+            System.out.println("\n=== MENU ===");
+            System.out.println("1. Insert Node");
+            System.out.println("2. Delete Node");
+            System.out.println("3. Modify Node");
+            System.out.println("4. Display List");
+            System.out.println("5. Exit");
+            System.out.print("Enter your choice: ");
+            choice = sc.nextInt();
+
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter data: ");
+                    int data = sc.nextInt();
+                    System.out.print("Enter position: ");
+                    int pos = sc.nextInt();
+                    cll.insertAt(data, pos);
+                    break;
+                case 2:
+                    System.out.print("Enter data to delete: ");
+                    int del = sc.nextInt();
+                    cll.deleteByData(del);
+                    break;
+                case 3:
+                    System.out.print("Enter data to modify: ");
+                    int oldData = sc.nextInt();
+                    System.out.print("Enter new data: ");
+                    int newData = sc.nextInt();
+                    cll.modifyNode(oldData, newData);
+                    break;
+                case 4:
+                    cll.display();
+                    break;
+                case 5:
+                    System.out.println(" Exiting...");
+                    break;
+                default:
+                    System.out.println(" Invalid choice");
+            }
+        } while (choice != 5);
+
+        sc.close();
+    }
+}
