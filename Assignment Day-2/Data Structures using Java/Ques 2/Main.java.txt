@@ -1,0 +1,47 @@
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        CircularQueue queue = new CircularQueue();
+        Scanner sc = new Scanner(System.in);
+        int choice;
+
+        do {
+            System.out.println("\n=== CIRCULAR QUEUE MENU ===");
+            System.out.println("1. Enqueue");
+            System.out.println("2. Dequeue");
+            System.out.println("3. Peek");
+            System.out.println("4. Display Queue");
+            System.out.println("5. Exit");
+            System.out.print("Enter your choice: ");
+            choice = sc.nextInt();
+
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter element: ");
+                    int data = sc.nextInt();
+                    queue.enqueue(data);
+                    break;
+                case 2:
+                    queue.dequeue();
+                    break;
+                case 3:
+                    int front = queue.peek();
+                    if (front != -1) {
+                        System.out.println(" Front element: " + front);
+                    }
+                    break;
+                case 4:
+                    queue.display();
+                    break;
+                case 5:
+                    System.out.println(" Exiting...");
+                    break;
+                default:
+                    System.out.println(" Invalid choice");
+            }
+        } while (choice != 5);
+
+        sc.close();
+    }
+}

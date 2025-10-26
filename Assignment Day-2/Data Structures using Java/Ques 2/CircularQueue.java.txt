@@ -1,0 +1,75 @@
+public class CircularQueue {
+    private Node front;
+    private Node rear;
+
+    public CircularQueue() {
+        this.front = null;
+        this.rear = null;
+    }
+
+    //  Enqueue - Insert element at rear
+    public void enqueue(int data) {
+        Node newNode = new Node(data);
+        if (front == null) {
+            front = newNode;
+            rear = newNode;
+            rear.next = front;  // make circular
+        } else {
+            rear.next = newNode;
+            rear = newNode;
+            rear.next = front;
+        }
+        System.out.println(" Enqueued: " + data);
+    }
+
+    //  Dequeue - Remove element from front
+    public int dequeue() {
+        if (front == null) {
+            System.out.println(" Queue is empty");
+            return -1;
+        }
+
+        int value;
+        if (front == rear) { // single element
+            value = front.data;
+            front = null;
+            rear = null;
+        } else {
+            value = front.data;
+            front = front.next;
+            rear.next = front;
+        }
+        System.out.println("  Dequeued: " + value);
+        return value;
+    }
+
+    //  Peek - Return front element without removing
+    public int peek() {
+        if (front == null) {
+            System.out.println(" Queue is empty");
+            return -1;
+        }
+        return front.data;
+    }
+
+    //  Display queue
+    public void display() {
+        if (front == null) {
+            System.out.println(" Queue is empty");
+            return;
+        }
+
+        System.out.print(" Circular Queue: ");
+        Node temp = front;
+        do {
+            System.out.print(temp.data + " ");
+            temp = temp.next;
+        } while (temp != front);
+        System.out.println();
+    }
+
+    //  Check if empty
+    public boolean isEmpty() {
+        return front == null;
+    }
+}

@@ -1,0 +1,131 @@
+1. Display top 5 highest salary earners in each dept?
+
+SELECT emp_id,
+       emp_name,
+       dept_id,
+       salary
+FROM (
+    SELECT emp_id,
+           emp_name,
+           dept_id,
+           salary,
+           RANK() OVER (PARTITION BY dept_id ORDER BY salary DESC) AS rnk
+    FROM employees
+) t
+WHERE rnk <= 5
+ORDER BY dept_id, salary DESC;   
+
+
+Output:
+emp_id	emp_name	dept_id	salary
+1	Amit	101	80000
+2	Riya	101	75000
+3	Karan	101	60000
+4	Neha	102	90000
+5	Rohan	102	85000
+
+=================================================================================================================================
+
+2. Write a stored function getWorkingDays which accepts joining data and returns
+the no of working days?
+
+
+DELIMITER $$
+
+CREATE FUNCTION getWorkingDays(joining_date DATE)
+RETURNS INT
+DETERMINISTIC
+BEGIN
+    DECLARE total_days INT;
+    DECLARE sundays INT;
+    DECLARE working_days INT;
+
+    -- Total days between joining date and today
+    SET total_days = DATEDIFF(CURDATE(), joining_date) + 1;
+
+    -- Calculate number of Sundays between joining date and today
+    SET sundays = FLOOR((total_days + DAYOFWEEK(joining_date) - 1) / 7);
+
+    -- Working days = total days - Sundays
+    SET working_days = total_days - sundays;
+
+    RETURN working_days;
+END$$
+
+DELIMITER ;
+
+
+Output:
+SELECT getWorkingDays('2025-10-01') AS Working_Days;
+
++---------------+
+| Working_Days  |
++---------------+
+|      13       |
++---------------+
+
+=====================================================================================================================================
+
+3. Write a stored procedure which updates the salary of a given emp based on no
+of working days. Give differential salary rise based on no of working days?
+
+DELIMITER $$
+
+CREATE PROCEDURE updateSalaryByWorkingDays(IN p_emp_id INT)
+BEGIN
+    DECLARE v_joining_date DATE;
+    DECLARE v_working_days INT;
+    DECLARE v_current_salary DECIMAL(10,2);
+    DECLARE v_new_salary DECIMAL(10,2);
+    DECLARE v_increment_percent DECIMAL(5,2);
+
+    -- Get current employee details
+    SELECT joining_date, salary 
+    INTO v_joining_date, v_current_salary
+    FROM employees
+    WHERE emp_id = p_emp_id;
+
+    -- Calculate working days using previously created function
+    SET v_working_days = getWorkingDays(v_joining_date);
+
+    -- Determine increment based on working days
+    IF v_working_days > 250 THEN
+        SET v_increment_percent = 0.20;
+    ELSEIF v_working_days > 200 THEN
+        SET v_increment_percent = 0.15;
+    ELSEIF v_working_days > 150 THEN
+        SET v_increment_percent = 0.10;
+    ELSE
+        SET v_increment_percent = 0.05;
+    END IF;
+
+    -- Calculate new salary
+    SET v_new_salary = v_current_salary + (v_current_salary * v_increment_percent);
+
+    -- Update salary in table
+    UPDATE employees
+    SET salary = v_new_salary
+    WHERE emp_id = p_emp_id;
+
+    -- Display output
+    SELECT p_emp_id AS Employee_ID,
+           v_working_days AS Working_Days,
+           CONCAT(v_increment_percent * 100, '%') AS Increment_Percentage,
+           v_current_salary AS Old_Salary,
+           v_new_salary AS New_Salary;
+END$$
+
+DELIMITER ;
+
+
+
+output:
+CALL updateSalaryByWorkingDays(101);
+
++-------------+---------------+-----------------------+-------------+-------------+
+| Employee_ID | Working_Days  | Increment_Percentage  | Old_Salary  | New_Salary  |
++-------------+---------------+-----------------------+-------------+-------------+
+|    101      |     265       |        20%            | 50000.00    | 60000.00    |
++-------------+---------------+-----------------------+-------------+-------------+
+
+====================================================================================================================================================
